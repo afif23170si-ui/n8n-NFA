@@ -1,0 +1,110 @@
+{
+  "name": "Modul 6: Tugas 1 - Otomatisasi Auto-Responder Email",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Pendaftaran SIB Mandiri NF Academy Batch 4",
+        "formDescription": "Harap isi data diri Anda.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nama",
+              "placeholder": "Masukan nama Anda",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Masukan email Anda",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Program",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "AI for Business"
+                  },
+                  {
+                    "option": "Codeless Data Science"
+                  },
+                  {
+                    "option": "DevOps Enginer"
+                  },
+                  {
+                    "option": "Mobile Apps"
+                  },
+                  {
+                    "option": "Fullstack Web Developer"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4654fb76-b150-40d2-8e58-85d3fe7ab5d0",
+      "name": "On form submission",
+      "webhookId": "be1f4884-8d54-4718-8c64-82b028817c2e"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Informasi Pendaftaran SIB Mandiri NF Academy Bacth 4",
+        "message": "=<!DOCTYPE html>\n<html lang=\"id\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"x-apple-disable-message-reformatting\">\n  <title>Konfirmasi Pendaftaran</title>\n  <style>\n    /* CSS Reset */\n    html, body {\n      margin: 0 auto !important;\n      padding: 0 !important;\n      height: 100% !important;\n      width: 100% !important;\n      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\n      background-color: #f0ebf8;\n    }\n    * {\n      -ms-text-size-adjust: 100%;\n      -webkit-text-size-adjust: 100%;\n    }\n    table, td {\n      mso-table-lspace: 0pt !important;\n      mso-table-rspace: 0pt !important;\n    }\n    img {\n      -ms-interpolation-mode: bicubic;\n    }\n    /* Mobile styles */\n    @media screen and (max-width: 600px) {\n      .email-container {\n        width: 100% !important;\n        margin: auto !important;\n      }\n      .content-padding {\n        padding: 25px 20px !important;\n      }\n      .data-box {\n        padding: 15px !important;\n      }\n    }\n  </style>\n</head>\n<body width=\"100%\" style=\"margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f0ebf8;\">\n  \n  <!-- Preheader Text tersembunyi -->\n  <div style=\"display: none; font-size: 1px; color: #f0ebf8; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;\">\n    Pendaftaran SIB Mandiri Batch 4 Anda berhasil! Berikut adalah rincian data dan langkah selanjutnya yang perlu Anda ketahui.\n  </div>\n\n  <center style=\"width: 100%; background-color: #f0ebf8;\">\n    <div style=\"max-width: 600px; margin: 0 auto;\" class=\"email-container\">\n      \n      <!-- Spacing Top -->\n      <table align=\"center\" role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"margin: auto;\">\n        <tr><td height=\"30\" style=\"font-size:30px; line-height:30px;\">&nbsp;</td></tr>\n      </table>\n\n      <!-- Main Container -->\n      <table align=\"center\" role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"margin: auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);\">\n        \n        <!-- Header -->\n        <tr>\n          <td bgcolor=\"#673ab7\" style=\"padding: 35px 20px; text-align: center;\">\n            <h1 style=\"margin: 0; color: #ffffff; font-size: 24px; font-weight: bold; line-height: 1.3;\">Konfirmasi Pendaftaran</h1>\n            <p style=\"margin: 8px 0 0 0; color: #e6ddf5; font-size: 16px;\">SIB Mandiri Batch 4 NF Academy</p>\n          </td>\n        </tr>\n\n        <!-- Content -->\n        <tr>\n          <td class=\"content-padding\" style=\"padding: 40px; color: #333333; font-size: 16px; line-height: 1.6;\">\n            <p style=\"margin-top: 0;\">Halo <strong>{{ $json[\"Nama\"] }}</strong>,</p>\n            \n            <p>Terima kasih telah melakukan pendaftaran. Data Anda telah berhasil kami terima di sistem NF Academy.</p>\n            <p>Berikut adalah rincian data yang Anda kirimkan:</p>\n\n            <!-- Data Box -->\n            <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"background-color: #f8f9fa; border-left: 4px solid #673ab7; border-radius: 0 4px 4px 0; margin: 25px 0;\">\n              <tr>\n                <td class=\"data-box\" style=\"padding: 20px;\">\n                  \n                  <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n                    <tr>\n                      <td style=\"padding-bottom: 12px;\">\n                        <span style=\"font-size: 12px; font-weight: bold; color: #673ab7; text-transform: uppercase; letter-spacing: 1px;\">Nama Lengkap</span><br>\n                        <span style=\"font-size: 16px; color: #202124;\">{{ $json[\"Nama\"] }}</span>\n                      </td>\n                    </tr>\n                    <tr>\n                      <td style=\"padding-bottom: 12px;\">\n                        <span style=\"font-size: 12px; font-weight: bold; color: #673ab7; text-transform: uppercase; letter-spacing: 1px;\">Email Terdaftar</span><br>\n                        <span style=\"font-size: 16px; color: #202124;\">{{ $json[\"Email\"] }}</span>\n                      </td>\n                    </tr>\n                    <tr>\n                      <td>\n                        <span style=\"font-size: 12px; font-weight: bold; color: #673ab7; text-transform: uppercase; letter-spacing: 1px;\">Program Pilihan</span><br>\n                        <span style=\"font-size: 16px; color: #202124;\">{{ $json.Program }}</span>\n                      </td>\n                    </tr>\n                  </table>\n\n                </td>\n              </tr>\n            </table>\n\n            <p style=\"margin: 0 0 20px 0;\">Mohon cek kembali data di atas. Jika ada kesalahan atau pertanyaan lebih lanjut, silakan balas pesan ini.</p>\n            <p style=\"margin: 0 0 35px 0;\">Selanjutnya, tim kami akan melakukan verifikasi dan menghubungi Anda untuk langkah berikutnya.</p>\n\n            <!-- Action Button -->\n            <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"margin-bottom: 35px;\">\n              <tr>\n                <td align=\"left\">\n                  <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"border-radius: 6px; background-color: #673ab7; text-align: center;\">\n                        <a href=\"https://www.nfcomputer.com\" target=\"_blank\" style=\"background-color: #673ab7; border: 12px solid #673ab7; border-left: 24px solid #673ab7; border-right: 24px solid #673ab7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 6px; font-weight: bold; color: #ffffff;\">Info Pendaftaran Terbaru</a>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n            </table>\n\n            <p style=\"margin: 0;\">Salam hangat,<br><strong>Tim Penerimaan NF Academy</strong></p>\n          </td>\n        </tr>\n\n        <!-- Footer -->\n        <tr>\n          <td style=\"background-color: #faf9fc; padding: 25px; text-align: center; border-top: 1px solid #eeeeee;\">\n            <p style=\"margin: 0; font-size: 13px; color: #888888; line-height: 1.5;\">\n              &copy; 2025 NF Academy. All rights reserved.<br>\n              Email ini dikirim secara otomatis oleh sistem pendaftaran kami.<br>\n              <span style=\"color: #673ab7;\">nfcomputer.com</span>\n            </p>\n          </td>\n        </tr>\n      </table>\n\n      <!-- Spacing Bottom -->\n      <table align=\"center\" role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"margin: auto;\">\n        <tr><td height=\"50\" style=\"font-size:50px; line-height:50px;\">&nbsp;</td></tr>\n      </table>\n\n    </div>\n  </center>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "27a65e0d-1e0a-44a6-af31-0cfc7062a3f0",
+      "name": "Send a message",
+      "webhookId": "a48aa405-8016-458e-ac17-89bc4eced216",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hKiHvPXStRM89bx5",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5089c10d-1b1f-41a7-a235-b061240cbbed",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b39acfbe00f556dc28149ae8be20b918e4f0d46b7516a3b83060b93df34baf9"
+  },
+  "id": "k0LipacE9IbY72FF",
+  "tags": []
+}

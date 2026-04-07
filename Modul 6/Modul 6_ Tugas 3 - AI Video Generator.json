@@ -1,0 +1,331 @@
+{
+  "name": "Modul 6: Tugas 3 - AI Video Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Generate Video Konten Otomatis",
+        "formDescription": "Isi informasi di bawah ini untuk memulai proses generate video AI dari gambar",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "prompt",
+              "fieldType": "textarea",
+              "placeholder": "Contoh: Make a moving video based on the image I sent. I want it to rotate",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "img_url",
+              "placeholder": "https://drive.google.com/uc?export=download&id=xxxx",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "api_key",
+              "fieldType": "password",
+              "placeholder": "Masukkan API Key Kie AI kamu",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7154a95e-878f-4c26-baf9-af67c185707d",
+      "name": "Submit Text Prompt untuk Generate Video",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -2304,
+        416
+      ],
+      "webhookId": "fa51983b-e2cc-47ed-b353-1f7d09977225",
+      "notes": "Langkah 1: Node Form sebagai pemicu awal. Pengguna mengisi prompt, img_url (URL gambar Google Drive format uc?export=download), dan api_key melalui URL form yang digenerate n8n."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.kie.ai/api/v1/jobs/createTask",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.api_key }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"grok-imagine/image-to-video\",\n  \"input\": {\n    \"image_urls\": [\n      \"{{$json.img_url}}\"\n    ],\n    \"prompt\": \"{{$json.prompt}}\",\n    \"mode\": \"normal\",\n    \"duration\": \"6\",\n    \"resolution\": \"480p\"\n  }\n}",
+        "options": {}
+      },
+      "id": "d94342d1-1788-40cf-9b66-0d6ef11127a9",
+      "name": "Mengirim Video Generation Request ke Kie AI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2064,
+        416
+      ],
+      "notes": "Langkah 2: HTTP POST ke endpoint https://api.kie.ai/api/v1/jobs/createTask dengan model grok-imagine/image-to-video. Header Authorization menggunakan api_key dari form. Respons berisi taskId untuk polling status."
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "2de9fdbc-3e40-44ea-9c9c-f912ad1a6a3f",
+      "name": "Menunggu Proses Generate Video",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1824,
+        416
+      ],
+      "webhookId": "wait-20-detik-polling-video",
+      "notes": "Langkah 3 (bagian polling loop): Memberikan jeda 20 detik agar server AI memiliki waktu memproses permintaan video sebelum dicek statusnya kembali."
+    },
+    {
+      "parameters": {
+        "url": "https://api.kie.ai/api/v1/jobs/recordInfo",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "taskId",
+              "value": "={{ $('Mengirim Video Generation Request ke Kie AI').item.json.data.taskId }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Submit Text Prompt untuk Generate Video').item.json.api_key }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fbb69465-1610-47a2-93d3-c177ec2b614f",
+      "name": "Mendapatkan Status Generate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1584,
+        416
+      ],
+      "notes": "Langkah 3 (bagian polling loop): HTTP GET ke endpoint recordInfo untuk mengecek status tugas. taskId diambil dari respons node createTask. api_key diambil dari node form pemicu."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-state-success",
+              "leftValue": "={{ $json.data.state }}",
+              "rightValue": "success",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b07aecf8-93b1-4047-9d9d-4eac4a3d5971",
+      "name": "Check Jika Generate Sudah Selesai",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1344,
+        416
+      ],
+      "notes": "Langkah 4: Gerbang logika yang memeriksa apakah field 'state' dalam data respons mengandung 'success'. TRUE → lanjut ke ekstraksi URL video. FALSE → kembali ke Wait (polling loop ulang)."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Video URL - Tugas 3 AI Video Generator\n// Mem-parsing field resultJson dari respons API dan mengekstrak URL video\n\nlet resultJson = $json.data.resultJson;\n\n// Jika resultJson berupa string, parse dulu\nif (typeof resultJson === 'string') {\n  resultJson = JSON.parse(resultJson);\n}\n\n// Ekstrak videoUrl dari resultUrls array\nconst videoUrl = resultJson.resultUrls?.[0] || resultJson.videoUrl || null;\n\nif (!videoUrl) {\n  throw new Error('Video URL tidak ditemukan dalam respons. Periksa struktur data: ' + JSON.stringify(resultJson));\n}\n\nreturn [{\n  json: {\n    videoUrl: videoUrl,\n    taskId: $json.data.taskId\n  }\n}];\n"
+      },
+      "id": "69dbe572-9f0d-4957-999e-419879849db8",
+      "name": "Parse Video URL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1120,
+        288
+      ],
+      "notes": "Langkah 5: Code Node JavaScript. Mem-parsing field resultJson (bisa berupa string JSON atau objek) dari respons API. Mengekstrak videoUrl dari array resultUrls. Melempar error jika URL tidak ditemukan."
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.videoUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "9bae0d8e-b423-458f-8e8d-3e1a2d6e1db8",
+      "name": "Download Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -896,
+        288
+      ],
+      "notes": "Langkah 6: HTTP GET untuk mengunduh file video (data biner) dari videoUrl yang diekstrak. Respons dikonfigurasi sebagai File (binary) agar bisa diunggah ke Google Drive."
+    },
+    {
+      "parameters": {
+        "name": "=Video_AI_{{ $now.format('yyyyMMdd_HHmmss') }}.mp4",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1JnBqxfFpZMmUVL_2SLk8HVqPyESUHWkt",
+          "mode": "list",
+          "cachedResultName": "Hasil Topik 2n3",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1JnBqxfFpZMmUVL_2SLk8HVqPyESUHWkt"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -656,
+        288
+      ],
+      "id": "1f9d932e-78a6-4db7-a7ef-bce9fe742e42",
+      "name": "Upload Video ke Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OOdsCVehmBaAL0M2",
+          "name": "Google Drive account"
+        }
+      },
+      "notes": "Langkah 7: Node Google Drive untuk mengunggah file video hasil unduhan ke folder 'Hasil Topik 2n3'. Nama file dinamis menggunakan timestamp. Operasi: upload file binary."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Submit Text Prompt untuk Generate Video": {
+      "main": [
+        [
+          {
+            "node": "Mengirim Video Generation Request ke Kie AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mengirim Video Generation Request ke Kie AI": {
+      "main": [
+        [
+          {
+            "node": "Menunggu Proses Generate Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Menunggu Proses Generate Video": {
+      "main": [
+        [
+          {
+            "node": "Mendapatkan Status Generate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mendapatkan Status Generate": {
+      "main": [
+        [
+          {
+            "node": "Check Jika Generate Sudah Selesai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Jika Generate Sudah Selesai": {
+      "main": [
+        [
+          {
+            "node": "Parse Video URL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Menunggu Proses Generate Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Video URL": {
+      "main": [
+        [
+          {
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
+        [
+          {
+            "node": "Upload Video ke Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ab2e34ee-67ee-474d-a69b-866bc91f1293",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b39acfbe00f556dc28149ae8be20b918e4f0d46b7516a3b83060b93df34baf9"
+  },
+  "id": "9waObwVKRikIXrHg",
+  "tags": []
+}
