@@ -1,0 +1,401 @@
+{
+  "name": "Modul 7: Tugas 2 - Pencatat Pengeluaran dari Email",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.from }}",
+                    "rightValue": "afifr5092@gmail.com",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "0c42227c-d9df-4b84-889c-78ebb44cc841"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "DomaiNesia"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "5bdc709a-b66e-4cdd-bf9d-1d0c59855840",
+                    "leftValue": "={{ $json.from }}",
+                    "rightValue": "karyacyber14@gmail.com",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Grab"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d11465a2-139d-4b26-b5ea-0ddda784dd79",
+                    "leftValue": "={{ $json.from }}",
+                    "rightValue": "karyacyber16@gmail.com",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Tokopedia"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        608
+      ],
+      "id": "2addb313-9608-46a2-8eba-d29e81ee3305",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa283d27-78dd-413e-9779-077d68fa4f19",
+              "name": "Tanggal",
+              "value": "={{ $('Menunggu dan mengambil email baru').item.json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "7b4ce26f-6b5d-4d06-bae4-85cae920b7e0",
+              "name": "Jumlah",
+              "value": "={{ $json.textPlain.match(/Total.*?Rp\\s*([\\d\\.]+)/s)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "c9ec8fa5-047a-45b0-b2bd-da8c9d5cf760",
+              "name": "Produk",
+              "value": "DomaiNesia - Layanan Hosting",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        384
+      ],
+      "id": "1711d606-49cd-4bcf-be8a-fb7cfd82af24",
+      "name": "DomaiNesia"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        112,
+        624
+      ],
+      "id": "ed3c556b-5c46-4caf-8cfe-97f783c64466",
+      "name": "Menunggu dan mengambil email baru",
+      "credentials": {
+        "imap": {
+          "id": "JXLWUt6QeXEDBGhk",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa283d27-78dd-413e-9779-077d68fa4f19",
+              "name": "Tanggal",
+              "value": "={{ $('Menunggu dan mengambil email baru').item.json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "7b4ce26f-6b5d-4d06-bae4-85cae920b7e0",
+              "name": "Jumlah",
+              "value": "={{ $json.textPlain.match(/Total\\s*Tarif.*?([\\d\\.]+)/s)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "c9ec8fa5-047a-45b0-b2bd-da8c9d5cf760",
+              "name": "Produk",
+              "value": "={{ $json.textPlain.match(/Grab\\s*(\\w+)/)?.[1] ?? 'Grab' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        624
+      ],
+      "id": "2c1b47e5-7fe9-4096-93d1-db4f461f95b4",
+      "name": "Grab"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa283d27-78dd-413e-9779-077d68fa4f19",
+              "name": "Tanggal",
+              "value": "={{ $('Menunggu dan mengambil email baru').item.json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "7b4ce26f-6b5d-4d06-bae4-85cae920b7e0",
+              "name": "Jumlah",
+              "value": "={{ $json.textPlain.match(/Harga\\s*Rp([\\d\\.]+)/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "c9ec8fa5-047a-45b0-b2bd-da8c9d5cf760",
+              "name": "Produk",
+              "value": "={{ $json.textPlain.match(/Nominal\\s*(.*?)\\s*Waktu/s)?.[1].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        848
+      ],
+      "id": "27e3932b-3499-4329-9c10-5d0899a295ca",
+      "name": "Tokopedia"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        992,
+        608
+      ],
+      "id": "3a4f44b7-5414-4635-b94b-1cb9615a9e05",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "18ZLyjPJi81Aq0PtzIX_Euq3ixVWCYLt9BhxuQh2fJBg",
+          "mode": "list",
+          "cachedResultName": "07 - 02 Pencatatan Keuangan dari Email Pip ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18ZLyjPJi81Aq0PtzIX_Euq3ixVWCYLt9BhxuQh2fJBg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18ZLyjPJi81Aq0PtzIX_Euq3ixVWCYLt9BhxuQh2fJBg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tanggal": "={{ $json.Tanggal }}",
+            "Jumlah": "={{ $json.Jumlah }}",
+            "Produk": "={{ $json.Produk }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tanggal",
+              "displayName": "Tanggal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Jumlah",
+              "displayName": "Jumlah",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Produk",
+              "displayName": "Produk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1232,
+        624
+      ],
+      "id": "486fc161-49ee-4e59-ac97-86c7886b7e37",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4Bq0WEz1HLdkJsPO",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "DomaiNesia",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Grab",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tokopedia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DomaiNesia": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Menunggu dan mengambil email baru": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grab": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Tokopedia": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "951a795d-fdd3-447b-82dc-0cbf117354c1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b39acfbe00f556dc28149ae8be20b918e4f0d46b7516a3b83060b93df34baf9"
+  },
+  "id": "OlPwpdGDZNazbRsV",
+  "tags": []
+}
