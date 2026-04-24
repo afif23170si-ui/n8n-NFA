@@ -1,0 +1,320 @@
+{
+  "name": "Tugas 6 - AI FAQ Chatbot Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "1a760ffe-5f7e-46e1-b1da-5d27d59385c4",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -352,
+        144
+      ],
+      "webhookId": "nfachat-webhook-001",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "95406a2d-523b-4604-939a-0d807194f926",
+              "name": "chat",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6ef39f1b-12e5-46e8-899f-22bfe0d47fe9",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-001",
+              "leftValue": "={{ $json.chat }}",
+              "rightValue": "SEO",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cond-002",
+              "leftValue": "={{ $json.chat }}",
+              "rightValue": "Email Marketing",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cond-003",
+              "leftValue": "={{ $json.chat }}",
+              "rightValue": "CLV",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cond-004",
+              "leftValue": "={{ $json.chat }}",
+              "rightValue": "Marketing Funnel",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cond-005",
+              "leftValue": "={{ $json.chat }}",
+              "rightValue": "B2B Marketing",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "fed3fd01-5e50-4696-be47-9b3f8277d34e",
+      "name": "Periksa Pesan",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Maaf, saya hanya dapat menjawab pertanyaan seputar topik pemasaran berikut.\n\nHarap bertanya menggunakan salah satu contoh:\n1. Apa perbedaan SEO dan SEM?\n2. Cara mengukur Email Marketing?\n3. Apa itu CLV?\n4. Strategi Awareness Marketing Funnel?\n5. Peran Webinar dalam B2B Marketing?\n\nSilakan coba lagi dengan pertanyaan yang relevan! 😊",
+        "additionalFields": {}
+      },
+      "id": "2bb15014-6cc3-4ac3-af6e-418c36594adb",
+      "name": "Output False - Pesan Panduan",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        -144
+      ],
+      "webhookId": "2fc318a0-62eb-45d5-a04d-1bae820ffc56",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chat }}",
+        "options": {}
+      },
+      "id": "99281cbf-8d6f-411d-9521-951dd5fdcb89",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        272,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "4c61ddfb-dc37-47a1-a0e7-d356a9628866",
+      "name": "Send Answer to User",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        656,
+        128
+      ],
+      "webhookId": "72df38fd-95bd-4510-97b5-9e7697ee9783",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1LvRa3UNxhRDOyIt9jRCOW4Rh6IeZh_pKK4UxDaNgkeQ",
+          "mode": "list",
+          "cachedResultName": "04-06 Pertanyaan untuk studi kasus chatbot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LvRa3UNxhRDOyIt9jRCOW4Rh6IeZh_pKK4UxDaNgkeQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LvRa3UNxhRDOyIt9jRCOW4Rh6IeZh_pKK4UxDaNgkeQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        464,
+        400
+      ],
+      "id": "e99f049c-0d7e-4dc9-9298-5468f2b3e2e6",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4Bq0WEz1HLdkJsPO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        240,
+        400
+      ],
+      "id": "94a1422b-921c-48f7-840b-8b2847adda43",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "qWC2YKgb6oue9ech",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Periksa Pesan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Periksa Pesan": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Output False - Pesan Panduan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send Answer to User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a87674da-a2c3-4a71-8a2e-09765dcb17e0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b39acfbe00f556dc28149ae8be20b918e4f0d46b7516a3b83060b93df34baf9"
+  },
+  "id": "sw7oHzblDjtOdvAO",
+  "tags": []
+}
