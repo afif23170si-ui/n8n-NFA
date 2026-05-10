@@ -1,0 +1,901 @@
+{
+  "name": "Modul 8: Tugas 5 - SOP Otomation Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.sop_text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "6eb58b16-3928-4410-9635-5ee1d2aec788",
+      "name": "Kirim Hasil ke User [alat kerja]",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        1120
+      ],
+      "webhookId": "ed0e7ee6-552c-46d2-9c2d-eb36778a4b82",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-alat-kerja",
+              "leftValue": "={{ $json.callback_data }}",
+              "rightValue": "alat_kerja",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "edf62ea5-86f2-4495-863c-d2ff122c54ab",
+      "name": "true alat_kerja",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        160,
+        1136
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-alatkerja-text",
+              "name": "sop_text",
+              "value": "🖥️ *PROSEDUR PERMINTAAN ALAT KERJA*\n\n📋 *Alat Kerja yang Dapat Diminta:*\n• Perangkat keras: Laptop, mouse, keyboard, headset\n• Perangkat lunak: Lisensi software & tools\n• Perlengkapan kantor: ATK, meja, kursi, dll\n\n📝 *Langkah Permintaan Alat Kerja:*\n1️⃣ Isi *Form Permintaan Alat Kerja* di portal HR/GA\n2️⃣ Cantumkan spesifikasi alat yang dibutuhkan\n3️⃣ Jelaskan urgensi dan kegunaan alat tersebut\n4️⃣ Minta persetujuan atasan langsung\n5️⃣ Submit form ke departemen GA (General Affairs)\n6️⃣ Proses pengadaan: *5-10 hari kerja*\n\n⚠️ *Ketentuan:*\n- Alat kerja adalah aset perusahaan, dijaga dengan baik\n- Kehilangan/kerusakan karena kelalaian menjadi tanggung jawab karyawan\n- Wajib dikembalikan saat resign/kontrak berakhir\n\nHub: ga@perusahaan.com | ext. 105",
+              "type": "string"
+            },
+            {
+              "id": "assign-alatkerja-chatid",
+              "name": "chat_id",
+              "value": "={{ $json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-alatkerja-data",
+              "name": "callback_data",
+              "value": "={{ $json.callback_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "085262e7-ebd6-40c7-8ad3-0a9197afbe22",
+      "name": "Alat Kerja",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        1136
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.sop_text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "a5303a1b-c47d-4796-8200-e74252886ae1",
+      "name": "Kirim Hasil ke User [asuransi]",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        880
+      ],
+      "webhookId": "e78f2ee0-6f0b-494b-976f-2714877651c9",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-asuransi",
+              "leftValue": "={{ $json.callback_data }}",
+              "rightValue": "asuransi",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ea17d0b1-55e3-4c4a-aa46-f0e5c5ef5a54",
+      "name": "true asuransi",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-asuransi-text",
+              "name": "sop_text",
+              "value": "🏥 *PROSEDUR KLAIM ASURANSI*\n\n📋 *Jenis Asuransi yang Ditanggung:*\n• BPJS Kesehatan (rawat inap & jalan)\n• BPJS Ketenagakerjaan (JKK, JKM, JHT)\n• Asuransi swasta tambahan (level tertentu)\n\n📝 *Langkah Klaim Asuransi Kesehatan:*\n1️⃣ Tunjukkan kartu BPJS Kesehatan di faskes\n2️⃣ Untuk rawat inap, hubungi HR dalam 1×24 jam\n3️⃣ Simpan semua dokumen: surat rujukan, resep, kwitansi\n4️⃣ Lengkapi *Form Klaim Asuransi* di portal HR\n5️⃣ Lampirkan semua dokumen pendukung\n6️⃣ Submit dalam waktu maks. *30 hari* setelah perawatan\n\n⚠️ *Catatan Penting:*\n- Klaim di luar jaringan faskes BPJS bisa ditolak\n- Simpan semua bukti asli, bukan fotokopi\n\nHub: hr@perusahaan.com | ext. 104",
+              "type": "string"
+            },
+            {
+              "id": "assign-asuransi-chatid",
+              "name": "chat_id",
+              "value": "={{ $json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-asuransi-data",
+              "name": "callback_data",
+              "value": "={{ $json.callback_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8615354a-94ec-497c-ae23-297fca5619e9",
+      "name": "Asuransi",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.sop_text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "f8a1fa62-492b-46c6-9c03-145c340ea3a5",
+      "name": "Kirim Hasil ke User [lembur]",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        496,
+        592
+      ],
+      "webhookId": "050665e9-a4fb-466c-a06e-44ef61ead1b4",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-lembur",
+              "leftValue": "={{ $json.callback_data }}",
+              "rightValue": "lembur",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "29c32fda-ec8e-46e0-bd98-57532fd1699a",
+      "name": "true lembur",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        160,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-lembur-text",
+              "name": "sop_text",
+              "value": "⏰ *PROSEDUR LEMBUR KARYAWAN*\n\n📋 *Ketentuan Lembur:*\n• Lembur maks. 3 jam/hari dan 14 jam/minggu\n• Lembur hari kerja: Upah × 1,5\n• Lembur hari libur/minggu: Upah × 2\n\n📝 *Langkah Pengajuan Lembur:*\n1️⃣ Diskusikan kebutuhan lembur dengan atasan\n2️⃣ Isi *Form Pengajuan Lembur* di portal HR\n3️⃣ Cantumkan tanggal, jam mulai, dan estimasi selesai\n4️⃣ Jelaskan pekerjaan yang akan diselesaikan\n5️⃣ Kirim form *sebelum* jam lembur dimulai\n6️⃣ Setelah lembur selesai, isi *Laporan Realisasi Lembur*\n\n💰 *Pembayaran Lembur:* Dibayarkan bersamaan gaji bulan berikutnya\n\nHub: hr@perusahaan.com | ext. 103",
+              "type": "string"
+            },
+            {
+              "id": "assign-lembur-chatid",
+              "name": "chat_id",
+              "value": "={{ $json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-lembur-data",
+              "name": "callback_data",
+              "value": "={{ $json.callback_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ae08c9c6-d447-45a1-87db-7322967fb509",
+      "name": "Lembur",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.sop_text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "6934c6b1-ec3e-4c78-9ce3-b19ec18250ca",
+      "name": "Kirim Hasil ke User [cuti]",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        384
+      ],
+      "webhookId": "59255a0b-884b-4157-a04a-0ccdd239a203",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-cuti",
+              "leftValue": "={{ $json.callback_data }}",
+              "rightValue": "cuti",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3a6e646f-f233-4fb7-bd9c-78a0a7b0abe9",
+      "name": "true cuti",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-cuti-text",
+              "name": "sop_text",
+              "value": "🏖️ *PROSEDUR CUTI KARYAWAN*\n\n📋 *Jenis Cuti yang Tersedia:*\n• Cuti Tahunan: 12 hari/tahun\n• Cuti Sakit: Sesuai surat dokter\n• Cuti Penting: Pernikahan, melahirkan, dll\n\n📝 *Langkah Pengajuan Cuti Tahunan:*\n1️⃣ Buka portal HR → menu *Pengajuan Cuti*\n2️⃣ Pilih tanggal mulai dan selesai cuti\n3️⃣ Isi alasan cuti\n4️⃣ Ajukan min. *H-3* sebelum tanggal cuti\n5️⃣ Tunggu persetujuan atasan (maks. 2 hari kerja)\n\n⚠️ *Ketentuan:*\n- Cuti tidak dapat diambil saat masa probasi\n- Sisa cuti tidak dapat diuangkan\n- Cuti mendadak wajib lapor ke atasan via telepon\n\nHub: hr@perusahaan.com | ext. 102",
+              "type": "string"
+            },
+            {
+              "id": "assign-cuti-chatid",
+              "name": "chat_id",
+              "value": "={{ $json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-cuti-data",
+              "name": "callback_data",
+              "value": "={{ $json.callback_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "75e11cf6-c94d-4f00-9f1d-7628ff569245",
+      "name": "Cuti",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.sop_text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "0444b7fd-d798-4f7a-9c3f-c8b8cba44559",
+      "name": "Kirim Hasil ke User [reimbursement]",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        112
+      ],
+      "webhookId": "21a472e3-7cbe-4428-a080-4c65c465a728",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-reimb",
+              "leftValue": "={{ $json.callback_data }}",
+              "rightValue": "reimbursement",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b7bc2a0f-23f0-4e49-964a-721fbd8024c3",
+      "name": "true reimbursement",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-reimb-text",
+              "name": "sop_text",
+              "value": "💰 *PROSEDUR REIMBURSEMENT*\n\n📋 *Langkah-langkah Pengajuan:*\n1️⃣ Simpan semua nota/struk pengeluaran asli\n2️⃣ Isi form Reimbursement di portal HR (bit.ly/form-reimb)\n3️⃣ Lampirkan foto nota yang jelas dan terbaca\n4️⃣ Dapatkan persetujuan dari atasan langsung\n5️⃣ Submit paling lambat *H+7* setelah transaksi\n\n⏰ *Batas Waktu:* 7 hari setelah pengeluaran\n💳 *Pembayaran:* Transfer ke rekening karyawan (5-7 hari kerja)\n\n📌 *Catatan:* Reimbursement tanpa nota TIDAK akan diproses.\n\nHub: hr@perusahaan.com | ext. 101",
+              "type": "string"
+            },
+            {
+              "id": "assign-reimb-chatid",
+              "name": "chat_id",
+              "value": "={{ $json.callback_query.message.chat.id }}",
+              "type": "string"
+            },
+            {
+              "id": "assign-reimb-data",
+              "name": "callback_data",
+              "value": "={{ $json.callback_query.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f78f24e1-a6fa-4112-94f8-c548b5f23c8a",
+      "name": "Reimbursement",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -512,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "=❗ Perintah tidak dikenali.\n\nKetik */start* untuk memulai dan melihat menu utama.",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "68291b2e-0cac-464b-aaba-b3b03e22d639",
+      "name": "False Output",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        -160
+      ],
+      "webhookId": "ea7515ea-aee3-4732-9234-31d3c71c4ecf",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "=👋 Selamat datang di *Bot SOP HR*!\n\nSilakan pilih topik prosedur yang ingin Anda ketahui:",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "=Prosedur Reimbursement 💰",
+                    "additionalFields": {
+                      "callback_data": "reimbursement"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Prosedur Cuti 🌴",
+                    "additionalFields": {
+                      "callback_data": "cuti"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Aturan Lembur ⏰",
+                    "additionalFields": {
+                      "callback_data": "lembur"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Klaim Asuransi Kesehatan 🏥",
+                    "additionalFields": {
+                      "callback_data": "asuransi"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Permintaan Alat Kerja Baru 💻",
+                    "additionalFields": {
+                      "callback_data": "alat_kerja"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "6a48b9eb-8682-43db-965d-7774e26274f6",
+      "name": "True Output",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        -384
+      ],
+      "webhookId": "1a1a3d22-2841-4821-9bbc-8b8ac15f0c4c",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-start",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/start",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "95a1fc0e-6f6d-47c4-8190-ce430dd5cef8",
+      "name": "Periksa pesan",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text_message"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "callback_query"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "804a716b-da62-4dfa-a210-ecd603a67973",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -512,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "05faa424-2345-4ab4-89dc-5da910291ed8",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -752,
+        -144
+      ],
+      "webhookId": "sop-bot-webhook",
+      "credentials": {
+        "telegramApi": {
+          "id": "RczR7y4pdDf8uKJH",
+          "name": "Telegram account (nfa bot)"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "true alat_kerja": {
+      "main": [
+        [
+          {
+            "node": "Kirim Hasil ke User [alat kerja]",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alat Kerja": {
+      "main": [
+        [
+          {
+            "node": "true alat_kerja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "true asuransi": {
+      "main": [
+        [
+          {
+            "node": "Kirim Hasil ke User [asuransi]",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alat Kerja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Asuransi": {
+      "main": [
+        [
+          {
+            "node": "true asuransi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "true lembur": {
+      "main": [
+        [
+          {
+            "node": "Kirim Hasil ke User [lembur]",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Asuransi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lembur": {
+      "main": [
+        [
+          {
+            "node": "true lembur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "true cuti": {
+      "main": [
+        [
+          {
+            "node": "Kirim Hasil ke User [cuti]",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Lembur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cuti": {
+      "main": [
+        [
+          {
+            "node": "true cuti",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "true reimbursement": {
+      "main": [
+        [
+          {
+            "node": "Kirim Hasil ke User [reimbursement]",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cuti",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reimbursement": {
+      "main": [
+        [
+          {
+            "node": "true reimbursement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Periksa pesan": {
+      "main": [
+        [
+          {
+            "node": "True Output",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "False Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Periksa pesan",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reimbursement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "368a7542-2b2f-433c-bb7b-26bef5e95879",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b39acfbe00f556dc28149ae8be20b918e4f0d46b7516a3b83060b93df34baf9"
+  },
+  "id": "TvzljmGv3q8JrcR8",
+  "tags": []
+}
